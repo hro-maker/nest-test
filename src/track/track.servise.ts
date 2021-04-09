@@ -5,10 +5,12 @@ import { trackDto } from './dto';
 import { User, UserDocument } from "./schemas/user.model";
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken'
+import * as dotenv from 'dotenv'
+dotenv.config()
 @Injectable()
 export class Trackservise{
     constructor(@InjectModel(User.name) private usermodel: Model<UserDocument>){}
-    async login(user):Promise< String | UserDocument>  {
+    async login(user):Promise< String | Object>  {
         try {
             const userr=await this.usermodel.findOne({email:user.email})
         if(!userr){
@@ -18,17 +20,20 @@ export class Trackservise{
             if(!password){
                 return "password is incorect"
             }
-            // const newuser=jwt.sign({userr._id},"hello")
-            return userr
+            const token=jwt.sign({_id:userr._id},process.env.JWT_SECRET,{
+                expiresIn: "1h",
+              })
+            return {userr,token}
         } catch (error) {
             return error.message
         }
-        
      }
-     by() {
+     by(req) {
+         console.log(req.headers)
          return "by"
      }
-     heloget() {
+     heloget(req) {
+         console.log(req.headers)
          return "hello world"
      }
     async register(dto:trackDto):Promise< String | UserDocument> {

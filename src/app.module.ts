@@ -16,8 +16,12 @@ export class AppModule{
     configure(consumer: MiddlewareConsumer) {
         consumer
           .apply(LoggerMiddleware)
-          .forRoutes(tracjControler);
+          .forRoutes({ path: 'hello', method: RequestMethod.GET },{path: 'helloget', method: RequestMethod.GET })
+          
+        //   consumer
+        //   .apply(LoggerMiddleware)
+        //   .forRoutes({ path: 'login', method: RequestMethod.POST });
       }
       
 }
-// { path: 'hy', method: RequestMethod.GET }
+// { path: 'register', method: RequestMethod.GET }
