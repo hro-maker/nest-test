@@ -1,16 +1,38 @@
-import { Injectable } from "@nestjs/common";
-
-
+import { HttpCode, HttpStatus, Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { FileServise, FileType } from "file/file.servise";
+import { Model } from "mongoose";
+import { LoginDto, UserDto } from "src/track/dto";
+import { User, UserDocument } from "src/track/schemas/user.model";
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthServise{
-    async register():Promise<String>{
-                return "hello world"
-    }
-    async upload(file) {
-        const { originalname } = file;
-      console.log(originalname)
+  constructor(
+    @InjectModel(User.name) private TrackModel: Model<UserDocument>,
+    private  fileservise:FileServise){}
+    async login(){
+         const users=await this.TrackModel.find()
+          return users
+    };
+    async register(res,file,dto:UserDto){
+      try {
+      const conditat=await this.TrackModel.findOne({email:dto.email})
+      if(conditat){
+        throw Error("user already registred")
+      }
+      const picturepath=this.fileservise.create(FileType.IMAGE,file)
+      dto.password= await bcrypt.hash(dto.password,10)
+      const user=this.TrackModel.create({...dto,picture:picturepath})
+      console.log("user",user)
+      return user
+      } catch (er) {
+        return er.message
+      }
+     
     }
 }
+// HttpCode(HttpStatus.BAD_REQUEST
+
 // import { S3 } from 'aws-sdk';
 // import { Logger } from '@nestjs/common';
  // async upload(file) {

@@ -1,8 +1,11 @@
-import { Module} from "@nestjs/common";
+import { MiddlewareConsumer, Module, RequestMethod} from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { ServeStaticModule } from "@nestjs/serve-static";
 import * as dotenv from 'dotenv'
 import { filemodule } from "file/file.mofule";
+import path from "path";
 import { Authmodule } from "./auth/auth.module";
+import { LoggerMiddleware } from "./track/middlwer/login.midleware";
 dotenv.config()
 @Module({
     imports:[
@@ -11,10 +14,12 @@ dotenv.config()
         filemodule
 ]
 })
-export class AppModule{}
-  // configure(consumer: MiddlewareConsumer) {
-    //     //   consumer
-    //     //   .apply(LoggerMiddleware)
-    //     //   .forRoutes({ path: 'login', method: RequestMethod.POST });
-    //   }
+export class AppModule{
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer
+//     .apply(LoggerMiddleware)
+//     .forRoutes({ path: 'login', method: RequestMethod.GET });
+// }
+}
+ 
     

@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { trackDto } from './dto';
 import { User, UserDocument } from "./schemas/user.model";
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
+import { UserDto } from "./dto";
 dotenv.config()
 @Injectable()
 export class Trackservise{
@@ -36,7 +36,7 @@ export class Trackservise{
          console.log(req.headers)
          return "hello world"
      }
-    async register(dto:trackDto):Promise< String | UserDocument> {
+    async register(dto:UserDto):Promise< String | UserDocument> {
                   const conditat= await this.usermodel.findOne({email:dto.email})
                   if(conditat){
                       return new Error("user already registret").message

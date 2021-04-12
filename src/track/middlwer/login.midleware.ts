@@ -6,6 +6,8 @@ dotenv.config()
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
+
+
     try {
       if(!req.headers.authorization){
         return res.status(400).json({message:"require "})
