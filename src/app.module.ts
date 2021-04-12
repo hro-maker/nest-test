@@ -1,27 +1,20 @@
-import { MiddlewareConsumer, Module, RequestMethod } from "@nestjs/common";
+import { Module} from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { LoggerMiddleware } from "./track/middlwer/login.midleware";
-import { TrackModule } from "./track/track.module";
 import * as dotenv from 'dotenv'
+import { filemodule } from "file/file.mofule";
+import { Authmodule } from "./auth/auth.module";
 dotenv.config()
-
-import { tracjControler } from './track/track.controller';
 @Module({
     imports:[
     MongooseModule.forRoot(`mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.3l6j1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`),
-        TrackModule
-    ]
+        Authmodule,
+        filemodule
+]
 })
-export class AppModule{
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-          .apply(LoggerMiddleware)
-          .forRoutes({ path: 'hello', method: RequestMethod.GET },{path: 'helloget', method: RequestMethod.GET })
-          
-        //   consumer
-        //   .apply(LoggerMiddleware)
-        //   .forRoutes({ path: 'login', method: RequestMethod.POST });
-      }
-      
-}
-// { path: 'register', method: RequestMethod.GET }
+export class AppModule{}
+  // configure(consumer: MiddlewareConsumer) {
+    //     //   consumer
+    //     //   .apply(LoggerMiddleware)
+    //     //   .forRoutes({ path: 'login', method: RequestMethod.POST });
+    //   }
+    
